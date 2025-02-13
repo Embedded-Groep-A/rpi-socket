@@ -5,5 +5,6 @@ void hostSocket(int port);
 void closeSocket();
 void connectToSocket(const char* ip, int port);
 void sendData(const char* data);
+char listenForData();
 
 #endif // SOCKET_H

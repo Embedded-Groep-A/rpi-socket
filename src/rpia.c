@@ -4,5 +4,6 @@
 
 int main() {
     hostSocket(PORT);
+    printf(listenForData());
     return 0;
 }

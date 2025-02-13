@@ -112,3 +112,21 @@ void sendData (const char *message) {
     send(new_socket, message, strlen(message), 0);
     printf("Data sent: %s\n", message);
 }
+
+/*!
+ * \brief Listen for data
+ * \details Luistert naar inkomende data op de socket
+ */
+char listenForData() {
+    char buffer[1024] = {0};
+    int valread;
+
+    while ((valread = read(new_socket, buffer, sizeof(buffer) - 1)) > 0) {
+        buffer[valread] = '\0';
+        return buffer;
+    }
+
+    if (valread < 0) {
+        perror("read");
+    }
+}
