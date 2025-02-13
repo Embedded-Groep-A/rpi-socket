@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <../include/socket.h>
 
 #define BACKLOG 10
 
