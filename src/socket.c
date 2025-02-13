@@ -109,7 +109,7 @@ void connectToSocket(const char *ip, int port) {
  * \param message De data die moet worden verstuurd
  */
 void sendData (const char *message) {
-    send(new_socket, message, strlen(message), 0);
+    write(new_socket, message, strlen(message));
     printf("Data sent: %s\n", message);
 }
 
@@ -117,11 +117,13 @@ void sendData (const char *message) {
  * \brief Listen for data
  * \details Luistert naar inkomende data op de socket
  */
+
 char *listenForData() {
-    char buffer[1024] = {0};
+    static char buffer[1024] = {0};
     int valread;
 
-    while ((valread = read(new_socket, buffer, sizeof(buffer) - 1)) > 0) {
+    valread = read(new_socket, buffer, sizeof(buffer) - 1);
+    if (valread > 0) {
         buffer[valread] = '\0';
         return buffer;
     }
@@ -129,4 +131,6 @@ char *listenForData() {
     if (valread < 0) {
         perror("read");
     }
+
+    return NULL;
 }
