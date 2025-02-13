@@ -117,7 +117,7 @@ void sendData (const char *message) {
  * \brief Listen for data
  * \details Luistert naar inkomende data op de socket
  */
-char listenForData() {
+char *listenForData() {
     char buffer[1024] = {0};
     int valread;
 
