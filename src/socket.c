@@ -96,7 +96,6 @@ void connectToSocket(const char *ip, int port) {
 void sendData (char *message) {
     int socket_desc;
 	struct sockaddr_in server;
-	char *message;
 	
 	//Create socket
 	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
@@ -109,18 +108,13 @@ void sendData (char *message) {
 	//Connect to remote server
 	if(connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0){
 		puts("connect error");
-		return 1;
 	}
 	
 	puts("Connected\n");
 	
 	//Send some data
-	message = "Hello word";
 	if( send(socket_desc , message , strlen(message) , 0) < 0){
 		puts("Send failed");
-		return 1;
 	}
 	puts("Data Send\n");
-	
-	return 0;
 }
