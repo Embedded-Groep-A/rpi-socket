@@ -5,6 +5,10 @@
 
 int main() {
     hostSocket(PORT);
-    printf(listenForData());
+    while (1)
+    {
+        printf("Data received: %s\n", listenForData());
+    }
+    
     return 0;
 }
