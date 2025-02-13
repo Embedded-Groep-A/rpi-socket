@@ -77,17 +77,30 @@ void closeSocket() {
  * \param ip Het ip-adres waarmee verbonden moet worden
  * \param port De poort waarmee verbonden moet worden
  */
+
 void connectToSocket(const char *ip, int port) {
-    int sock = 0;
     struct sockaddr_in serv_addr;
 
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("socket failed");
+    if ((new_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("socket creation error");
         exit(EXIT_FAILURE);
     }
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
+
+    // Convert IPv4 and IPv6 addresses from text to binary form
+    if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) <= 0) {
+        perror("Invalid address/ Address not supported");
+        exit(EXIT_FAILURE);
+    }
+
+    if (connect(new_socket, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        perror("Connection Failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Connected to %s:%d\n", ip, port);
 }
 
 /*!
@@ -95,29 +108,7 @@ void connectToSocket(const char *ip, int port) {
  * \details Stuurt data naar de socket
  * \param message De data die moet worden verstuurd
  */
-void sendData (char *message) {
-    int socket_desc;
-	struct sockaddr_in server;
-	
-	//Create socket
-	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-	if (socket_desc == -1) printf("Could not create socket");
-		
-	server.sin_addr.s_addr = inet_addr("");
-	server.sin_family = AF_INET;
-    server.sin_port = htons(8080);
-
-	//Connect to remote server
-	if(connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0){
-		puts("connect error");
-        return;
-	}
-	
-	puts("Connected\n");
-	
-	//Send some data
-	if( send(socket_desc , message , strlen(message) , 0) < 0){
-		puts("Send failed");
-	}
-	puts("Data Send\n");
+void sendData (const char *message) {
+    send(new_socket, message, strlen(message), 0);
+    printf("Data sent: %s\n", message);
 }
