@@ -68,6 +68,7 @@ void hostSocket(int port) {
 void closeSocket() {
     close(new_socket);
     close(server_fd);
+    printf("Socket closed\n");
 }
 
 /*!
@@ -109,6 +110,7 @@ void sendData (char *message) {
 	//Connect to remote server
 	if(connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0){
 		puts("connect error");
+        return;
 	}
 	
 	puts("Connected\n");
