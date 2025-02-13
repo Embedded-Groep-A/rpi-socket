@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <../include/socket.h>
 
 #define BACKLOG 10
 
@@ -68,7 +67,6 @@ void hostSocket(int port) {
 void closeSocket() {
     close(new_socket);
     close(server_fd);
-    printf("Socket closed\n");
 }
 
 /*!
@@ -77,31 +75,17 @@ void closeSocket() {
  * \param ip Het ip-adres waarmee verbonden moet worden
  * \param port De poort waarmee verbonden moet worden
  */
-
-void connectToSocket(const char *host, int port) {
+void connectToSocket(const char *ip, int port) {
+    int sock = 0;
     struct sockaddr_in serv_addr;
 
-    if ((new_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("socket creation error");
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
-
-
-    // Convert IPv4 and IPv6 addresses from text to binary form
-    if (inet_pton(AF_INET, gethostbyname(host), &serv_addr.sin_addr) <= 0) {
-        perror("Invalid address/ Address not supported");
-        exit(EXIT_FAILURE);
-    }
-
-    if (connect(new_socket, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        perror("Connection Failed");
-        exit(EXIT_FAILURE);
-    }
-
-    printf("Connected to (%s) %s:%d\n", host, gethostbyname(host), port);
 }
 
 /*!
@@ -109,29 +93,28 @@ void connectToSocket(const char *host, int port) {
  * \details Stuurt data naar de socket
  * \param message De data die moet worden verstuurd
  */
-void sendData (const char *message) {
-    write(new_socket, message, strlen(message));
-    printf("Data sent: %s\n", message);
-}
+void sendData (char *message) {
+    int socket_desc;
+	struct sockaddr_in server;
+	
+	//Create socket
+	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+	if (socket_desc == -1) printf("Could not create socket");
+		
+	server.sin_addr.s_addr = inet_addr("");
+	server.sin_family = AF_INET;
+    server.sin_port = htons(8080);
 
-/*!
- * \brief Listen for data
- * \details Luistert naar inkomende data op de socket
- */
-
-char *listenForData() {
-    static char buffer[1024] = {0};
-    int valread;
-
-    valread = read(new_socket, buffer, sizeof(buffer) - 1);
-    if (valread > 0) {
-        buffer[valread] = '\0';
-        return buffer;
-    }
-
-    if (valread < 0) {
-        perror("read");
-    }
-
-    return NULL;
+	//Connect to remote server
+	if(connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0){
+		puts("connect error");
+	}
+	
+	puts("Connected\n");
+	
+	//Send some data
+	if( send(socket_desc , message , strlen(message) , 0) < 0){
+		puts("Send failed");
+	}
+	puts("Data Send\n");
 }
