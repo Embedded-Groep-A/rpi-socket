@@ -6,6 +6,7 @@
 
 int main() {
     connectToSocket(IP, PORT);
+    delay(100);
     sendData("Hello world");
     closeSocket();
 
