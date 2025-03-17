@@ -78,7 +78,7 @@ void closeSocket() {
  * \param port De poort waarmee verbonden moet worden
  */
 
-void connectToSocket(const char *host, int port) {
+void connectToSocket(const char *ip, int port) {
     struct sockaddr_in serv_addr;
 
     if ((new_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -91,7 +91,7 @@ void connectToSocket(const char *host, int port) {
 
 
     // Convert IPv4 and IPv6 addresses from text to binary form
-    if (inet_pton(AF_INET, gethostbyname(host), &serv_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) <= 0) {
         perror("Invalid address/ Address not supported");
         exit(EXIT_FAILURE);
     }
@@ -101,7 +101,7 @@ void connectToSocket(const char *host, int port) {
         exit(EXIT_FAILURE);
     }
 
-    printf("Connected to (%s) %s:%d\n", host, gethostbyname(host), port);
+    printf("Connected to (%s) %s:%d\n", host, ip, port);
 }
 
 /*!
