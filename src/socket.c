@@ -45,7 +45,7 @@ void acceptConnection() {
     new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
     inet_ntop(AF_INET, &address.sin_addr, ip_str, sizeof(ip_str));
 
-    printf("Connection accepted\n");
+    printf("Connection accepted, client IP: %s\n", ip_str);
 }
 
 /*!
