@@ -10,6 +10,8 @@
 int server_fd, new_socket;
 struct sockaddr_in address;
 int addrlen = sizeof(address);
+char ip_str[INET_ADDRSTRLEN];
+
 
 /*!
  * \brief Create socket
@@ -41,6 +43,7 @@ void hostSocket(int port) {
  */
 void acceptConnection() {
     new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
+    inet_ntop(AF_INET, &address.sin_addr, ip_str, sizeof(ip_str));
 
     printf("Connection accepted\n");
 }
