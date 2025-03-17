@@ -115,10 +115,8 @@ char *listenForData() {
         buffer[valread] = '\0';
         return buffer;
     }
-
-    if (valread < 0) {
-        perror("read");
+    if (valread == 0) {
+        printf("Client disconnected\n");
     }
-
     return NULL;
 }
