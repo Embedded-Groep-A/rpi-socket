@@ -110,13 +110,15 @@ char *listenForData() {
     static char buffer[1024] = {0};
     int valread;
 
-    valread = read(new_socket, buffer, sizeof(buffer) - 1);
-    if (valread > 0) {
-        buffer[valread] = '\0';
-        return buffer;
-    }
-    if (valread == 0) {
-        printf("Client disconnected\n");
-    }
-    return NULL;
+    return read(new_socket, buffer, sizeof(buffer) - 1);
+
+    // valread = read(new_socket, buffer, sizeof(buffer) - 1);
+    // if (valread > 0) {
+    //     buffer[valread] = '\0';
+    //     return buffer;
+    // }
+    // if (valread == 0) {
+    //     printf("Client disconnected\n");
+    // }
+    //return NULL;
 }

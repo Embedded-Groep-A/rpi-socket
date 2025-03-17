@@ -9,10 +9,11 @@ int main() {
     {
         acceptConnection();
         char *data = listenForData();
-        if (data != NULL)
-        {
-            printf("Data received: %s\n", data);
-        }
+        printf("%s\n", data);
+        // if (data != NULL)
+        // {
+        //     printf("Data received: %s\n", data);
+        // }
     }
     
     return 0;

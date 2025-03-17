@@ -11,6 +11,8 @@ int main() {
     connectToSocket(IP_LOCAL, PORT);
     sleep(1);
     sendData("Hello world");
+    sleep(1);
+    sendData("Goodbye world");
     closeSocket();
 
     return 0;
