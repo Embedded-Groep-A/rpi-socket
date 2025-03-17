@@ -40,7 +40,7 @@ void hostSocket(int port) {
  * \details Accepteert een inkomende verbinding op de socket
  */
 void acceptConnection() {
-    new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)
+    new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
 
     printf("Connection accepted\n");
 }
