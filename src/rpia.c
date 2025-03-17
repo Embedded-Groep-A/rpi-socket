@@ -1,7 +1,7 @@
 #include <../include/socket.h>
 #include <stdio.h>
 
-#define PORT 8080
+#define PORT 8380
 
 int main() {
     hostSocket(PORT);
