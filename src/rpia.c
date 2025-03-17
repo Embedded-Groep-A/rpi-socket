@@ -7,6 +7,7 @@ int main() {
     hostSocket(PORT);
     while (1)
     {
+        acceptConnection();
         char *data = listenForData();
         if (data != NULL)
         {

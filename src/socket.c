@@ -8,6 +8,8 @@
 #define BACKLOG 10
 
 int server_fd, new_socket;
+struct sockaddr_in address;
+int addrlen = sizeof(address);
 
 /*!
  * \brief Create socket
@@ -15,52 +17,34 @@ int server_fd, new_socket;
  * \param port De poort waarop de socket moet worden aangemaakt
  */
 void hostSocket(int port) {
-    struct sockaddr_in address;
     int opt = 1;
-    int addrlen = sizeof(address);
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
 
-    // Creating socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("socket failed");
-        exit(EXIT_FAILURE);
-    }
-
-    // Forcefully attaching socket to the port 8080
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
-        perror("setsockopt");
-        close(server_fd);
-        exit(EXIT_FAILURE);
-    }
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
-    // Forcefully attaching socket to the port 8080
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        perror("bind failed");
-        close(server_fd);
-        exit(EXIT_FAILURE);
-    }
+    bind(server_fd, (struct sockaddr *)&address, sizeof(address));
 
-    if (listen(server_fd, BACKLOG) < 0) {
-        perror("listen");
-        close(server_fd);
-        exit(EXIT_FAILURE);
-    }
 
-    printf("Server is listening on port %d\n", port);
+    listen(server_fd, BACKLOG);
 
-    if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
-        perror("accept");
-        close(server_fd);
-        exit(EXIT_FAILURE);
-    }
+
+    printf("Server is listening on port %d\n", port);  
+}
+
+/*!
+ * \brief Accept incoming connection
+ * \details Accepteert een inkomende verbinding op de socket
+ */
+void acceptConnection() {
+    new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)
 
     printf("Connection accepted\n");
-
-    
 }
+
 /*!
  * \brief Close socket
  * \details Sluit de socket
