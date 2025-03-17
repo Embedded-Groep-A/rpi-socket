@@ -101,7 +101,7 @@ void connectToSocket(const char *ip, int port) {
         exit(EXIT_FAILURE);
     }
 
-    printf("Connected to (%s) %s:%d\n", host, ip, port);
+    printf("Connected to %s:%d\n", ip, port);
 }
 
 /*!
