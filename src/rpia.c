@@ -32,10 +32,10 @@ int main() {
         if (read(file, buffer, sizeof(buffer)) > 0) {
             printf("Data read: %s\n", buffer);
             if (buffer[0] == '1') {
-                sendData("1")
+                sendData("1");
                 write(file, buffer, 1);
             } else if (buffer[0] == '0') {
-                sendData("0")
+                sendData("0");
             }
         }
 
